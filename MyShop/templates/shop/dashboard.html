@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - MyShop{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Inventory Dashboard</h2>
+        <a href="{% url 'product_create' %}" class="btn btn-primary">Add Product</a>
+    </div>
+
+    {% if low_stock %}
+    <div class="alert alert-warning">
+        {{ low_stock|length }} product(s) are running low on stock.
+    </div>
+    {% endif %}
+
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-3">
+            <div class="card {% if product.is_low_stock %}border-danger{% endif %}">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ product.name }}
+                        {% if product.is_low_stock %}<span class="badge bg-danger">Low Stock</span>{% endif %}
+                    </h5>
+                    <p class="card-text text-muted">{{ product.category.name }}</p>
+                    <p class="card-text">${{ product.price }} &mdash; {{ product.stock }} in stock</p>
+                    <a href="{% url 'product_update' product.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a href="{% url 'product_delete' product.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No products yet. Add one to get started.</p>
+        {% endfor %}
+    </div>
+
+    <hr class="my-4">
+
+    <h4>Orders per Day</h4>
+    <canvas id="ordersChart" height="100"></canvas>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+fetch("{% url 'orders_chart_data' %}")
+    .then(res => res.json())
+    .then(data => {
+        new Chart(document.getElementById('ordersChart'), {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Orders',
+                    data: data.counts,
+                    borderColor: '#0d6efd',
+                    tension: 0.3
+                }]
+            }
+        });
+    });
+</script>
+{% endblock %}

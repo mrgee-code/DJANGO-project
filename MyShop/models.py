@@ -35,11 +35,12 @@ class Order(models.Model):
         return f'Order #{self.id} - {self.user}'
     
 class OrderItem(models.Model):
-    oder = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
     def subtotal(self):
-        return self.product.price *self.quantity
-    
+        return self.product.price * self.quantity
+
     def __str__(self):
         return f'{self.quantity} x {self.product.name}'
