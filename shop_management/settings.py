@@ -117,8 +117,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MPESA_ENVIRONMENT = "sandbox"
+MPESA_CONSUMER_KEY = "Zf8NO8Khor7PtVsnwwANWGpbU46o6dAzFufQlYUljfEvRm0U"
+MPESA_CONSUMER_SECRET = "UwtTe4WvctmAcoBB4C9MKk7CO3MevYqmZaN9ckkZjgg5X0DXudcJACUdbzsqI1E6"
+MPESA_EXPRESS_SHORTCODE = "174379"
+MPESA_PASSKEY = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+MPESA_INITIATOR_USERNAME = "testapi"
+MPESA_INTITIATOR_SECURITY_CREDENTIAL = "Safaricom123!!"
+MPESA_SHORTCODE = "174379"
+MPESA_SHORTCODE_TYPE = "paybill"
+

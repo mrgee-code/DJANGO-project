@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}About - MyShop{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row align-items-center mb-5">
+        <div class="col-md-7">
+            <h1 class="fw-bold mb-3">About MyShop</h1>
+            <p class="lead">
+                MyShop started as a simple idea: make everyday shopping fast, honest, and reliable.
+                From electronics to groceries to everyday wear, we stock what our customers actually need,
+                and we keep a close eye on our shelves so popular items rarely run out.
+            </p>
+            <p>
+                Every order placed here is tracked in real time, and every product's stock level is
+                monitored automatically — so when you see something in the catalog, you know it's genuinely
+                available.
+            </p>
+        </div>
+        <div class="col-md-5 text-center">
+            <div class="p-5 bg-light rounded-4">
+                <h2 class="display-4 fw-bold text-primary mb-0">{{ featured_products|length }}+</h2>
+                <p class="text-muted mb-0">Products in our catalog</p>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <h2 class="text-center mb-4">Featured This Week</h2>
+
+    {% if featured_products %}
+    <div id="productCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for product in featured_products %}
+            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+                {% if forloop.first %}class="active" aria-current="true"{% endif %}
+                aria-label="Slide {{ forloop.counter }}"></button>
+            {% endfor %}
+        </div>
+
+        <div class="carousel-inner rounded-4 overflow-hidden" style="background: #f8f9fa;">
+            {% for product in featured_products %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="d-flex flex-column align-items-center justify-content-center text-center py-5" style="min-height: 360px;">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="rounded-4 mb-3" style="max-height: 220px; object-fit: cover;">
+                    {% endif %}
+                    {% if product.is_low_stock %}
+                    <span class="badge bg-danger mb-3">Almost Gone &mdash; Order Soon</span>
+                    {% else %}
+                    <span class="badge bg-success mb-3">In Stock</span>
+                    {% endif %}
+                    <h3 class="fw-bold">{{ product.name }}</h3>
+                    <p class="text-muted">{{ product.category.name }}</p>
+                    <p class="display-6 fw-bold text-primary">${{ product.price }}</p>
+                    <a href="{% url 'order_create' product.id %}" class="btn btn-primary btn-lg mt-2">Order Now</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    {% else %}
+    <p class="text-center text-muted">No products to feature yet &mdash; check back soon.</p>
+    {% endif %}
+
+    <div class="text-center mb-5">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-primary btn-lg">View Full Catalog</a>
+    </div>
+</div>
+{% endblock %}

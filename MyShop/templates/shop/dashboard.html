@@ -17,6 +17,9 @@
         {% for product in products %}
         <div class="col-md-4 mb-3">
             <div class="card {% if product.is_low_stock %}border-danger{% endif %}">
+                 {% if product.image %}
+                 <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: cover;">
+                 {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">
                         {{ product.name }}
@@ -25,7 +28,9 @@
                     <p class="card-text text-muted">{{ product.category.name }}</p>
                     <p class="card-text">${{ product.price }} &mdash; {{ product.stock }} in stock</p>
                     <a href="{% url 'product_update' product.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                    <a href="{% url 'product_delete' product.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    <a href="{% url 'product_delete' product.id %}" class="btn btn-sm btn-outline-danger"
+                    onclick="return confirm('Delete {{ product.name }}? This cannot be undone.');">Delete</a>
+                    <a href="{% url 'order_create' product.id %}" class="btn btn-sm btn-success">Make Order</a>
                 </div>
             </div>
         </div>

@@ -2,19 +2,23 @@ from django.contrib import admin
 from django.contrib import admin 
 from .models import Category, Product, Order, OrderItem
 
-# Register your models here.
+#Register your models here.
 admin.site.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name']
+
 
 admin.site.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'price', 'stock', 'is_low_stock']
     list_filter = ['category']
     search_fields = ['name']
+
+
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 1
+
 
 admin.site.register(Order)
 class OrderAdmin(admin.ModelAdmin):

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}MyShop - Welcome{% endblock %}
+
+{% block content %}
+<style>
+    .hero {
+        position: relative;
+        height: 80vh;
+        min-height: 480px;
+        background-image:
+            linear-gradient(rgba(15, 23, 42, 0.55), rgba(15, 23, 42, 0.55)),
+            url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .hero h1 {
+        color: #ffffff;
+        font-weight: 800;
+        font-size: clamp(2rem, 5vw, 3.75rem);
+        letter-spacing: 0.03em;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    }
+</style>
+
+<section class="hero">
+    <h1>WELCOME TO MY SHOP</h1>
+</section>
+
+<div class="container text-center py-5">
+    <p class="lead">Quality products, fair prices, and stock you can trust.</p>
+    <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">Browse Inventory</a>
+</div>
+{% endblock %}

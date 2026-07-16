@@ -17,10 +17,11 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
     low_stock_threshold = models.PositiveIntegerField(default=5)
+    image = models.ImageField(upload_to='products/', blank=True, null=True)
 
     def is_low_stock(self):
         return self.stock <= self.low_stock_threshold
-    
+
     def __str__(self):
         return self.name
     
