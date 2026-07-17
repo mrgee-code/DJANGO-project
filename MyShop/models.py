@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 class Category(models.Model):
@@ -45,3 +47,32 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f'{self.quantity} x {self.product.name}'
+    
+class ContactMessage(models.Model):
+    MESSAGE_TYPES = [
+        ('complaint', 'Complaint'),
+        ('compliment', 'Compliment'),
+        ('suggestion', 'Suggestion for Improvement'),
+    ]
+
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message_type = models.CharField(max_length=20, choices=MESSAGE_TYPES)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.get_message_type_display()} from {self.name}'
+    
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s profile"
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)

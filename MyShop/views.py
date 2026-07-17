@@ -8,17 +8,20 @@ from django.db.models import Count
 from django.db.models.functions import TruncDate
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 
-from .models import Product, Category, Order, OrderItem
+from .models import Product, Category, Order, OrderItem, ContactMessage
 # Create your views here.
+@login_required
 def dashboard(request):
     products = Product.objects.select_related('category').all()
     low_stock = [p for p in products if p.is_low_stock()]
-    
-    return render(request,'shop/dashboard.html',
-                  {'products':products,
-                   'low_stock':low_stock})
-
+    return render(request, 'shop/dashboard.html', {
+        'products': products,
+        'low_stock': low_stock,
+    })
 def product_create(request):
     if request.method == 'POST':
         Product.objects.create(
@@ -91,6 +94,20 @@ def order_confirmation(request, pk):
 def index(request):
     return render(request, 'shop/index.html')
 
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            if request.FILES.get('picture'):
+                user.profile.picture = request.FILES['picture']
+                user.profile.save()
+            login(request, user)
+            return redirect('dashboard')
+    else:
+        form = UserCreationForm()
+    return render(request, 'shop/signup.html', {'form': form})
+
 def about(request):
     featured_products = Product.objects.select_related('category').order_by('-id')[:5]
     return render(request, 'shop/about.html', {'featured_products': featured_products})
@@ -131,3 +148,23 @@ def initiate_mpesa_payment(phone, amount, order):
     url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
     response = requests.post(url, json=payload, headers=headers)
     return response.json()
+
+def contact(request):
+    if request.method == 'POST':
+        ContactMessage.objects.create(
+            name=request.POST['name'],
+            email=request.POST['email'],
+            message_type=request.POST['message_type'],
+            message=request.POST['message'],
+        )
+        return render(request, 'shop/contact.html', {'submitted': True})
+    return render(request, 'shop/contact.html')
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        if request.FILES.get('picture'):
+            request.user.profile.picture = request.FILES['picture']
+            request.user.profile.save()
+        return redirect('profile')
+    return render(request, 'shop/profile.html')

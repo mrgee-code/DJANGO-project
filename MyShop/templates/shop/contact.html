@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Contact - MyShop{% endblock %}
+
+{% block content %}
+<style>
+    .contact-hero {
+        background: linear-gradient(135deg, #0d6efd 0%, #084298 100%);
+        padding: 4rem 0 6rem;
+        color: #ffffff;
+    }
+
+    .contact-card {
+        margin-top: -4rem;
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15);
+    }
+
+    .contact-card .form-control,
+    .contact-card .form-select {
+        border-radius: 0.5rem;
+        padding: 0.7rem 0.9rem;
+    }
+
+    .contact-card .btn-primary {
+        border-radius: 0.5rem;
+        padding: 0.7rem 1.5rem;
+        font-weight: 600;
+    }
+</style>
+
+<div class="contact-hero text-center">
+    <div class="container">
+        <h1 class="fw-bold display-5">Get in Touch</h1>
+        <p class="lead mb-0">
+            Have a complaint, a compliment, or an idea for how we could do better? We read every message.
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card contact-card p-4 p-md-5 bg-white">
+                {% if submitted %}
+                <div class="text-center py-4">
+                    <div class="mb-3" style="font-size: 3rem;">&#9989;</div>
+                    <h3 class="fw-bold">Message received</h3>
+                    <p class="text-muted">Thanks for reaching out &mdash; we'll take it from here.</p>
+                    <a href="{% url 'index' %}" class="btn btn-outline-primary mt-2">Back to Home</a>
+                </div>
+                {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Your Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">What's this about?</label>
+                        <select name="message_type" class="form-select" required>
+                            <option value="complaint">Complaint</option>
+                            <option value="compliment">Compliment</option>
+                            <option value="suggestion">Suggestion for Improvement</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Message</label>
+                        <textarea name="message" class="form-control" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Send Message</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-5"></div>
+{% endblock %}

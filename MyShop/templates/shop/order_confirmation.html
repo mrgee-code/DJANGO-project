@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-4 text-center">
     <h2>Order #{{ order.id }} placed</h2>
-    <p class="lead">Total: ${{ order.total }}</p>
+    <p class="lead">Total: KES {{ order.total }}</p>
     <p class="text-muted">A payment prompt has been sent to your phone via M-Pesa.</p>
     <a href="{% url 'dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
 </div>

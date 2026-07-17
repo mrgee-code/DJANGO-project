@@ -17,16 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from .import views
-
+from django.contrib.auth import views as auth_views
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('admin/', admin.site.urls),
     path('about/', views.about, name='about'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('signup/', views.signup, name='signup'),
+    path('login/', auth_views.LoginView.as_view(template_name='shop/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
     path('product/add/', views.product_create, name='product_create'),
     path('product/<int:pk>/edit/', views.product_update, name='product_update'),
     path('product/<int:pk>/delete/', views.product_delete, name='product_delete'),
     path('api/orders-chart/', views.orders_chart_data, name='orders_chart_data'),
     path('product/<int:pk>/order/', views.order_create, name='order_create'),
     path('order/<int:pk>/confirmation/', views.order_confirmation, name='order_confirmation'),
+    path('contact/', views.contact, name='contact'),
+    path('profile/', views.profile, name='profile'),
 ]

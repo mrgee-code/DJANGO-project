@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-4" style="max-width: 500px;">
     <h2>Order: {{ product.name }}</h2>
-    <p class="text-muted">${{ product.price }} each &mdash; {{ product.stock }} available</p>
+    <p class="text-muted">KES {{ product.price }} each &mdash; {{ product.stock }} available</p>
     <form method="post">
         {% csrf_token %}
         <div class="mb-3">

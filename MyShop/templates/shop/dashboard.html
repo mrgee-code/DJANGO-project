@@ -1,7 +1,19 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard - MyShop{% endblock %}
 {% block content %}
-<div class="container mt-4">
+<style>
+    .dashboard-page {
+        background: #b9d1ee;
+        min-height: 100vh;
+        padding-bottom: 0;
+    }
+    #ordersChart{
+        display: block;
+    }
+</style>
+
+<div class="dashboard-page">
+<div class="container ">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Inventory Dashboard</h2>
         <a href="{% url 'product_create' %}" class="btn btn-primary">Add Product</a>
@@ -17,19 +29,19 @@
         {% for product in products %}
         <div class="col-md-4 mb-3">
             <div class="card {% if product.is_low_stock %}border-danger{% endif %}">
-                 {% if product.image %}
-                 <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: cover;">
-                 {% endif %}
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: cover;">
+                {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">
                         {{ product.name }}
                         {% if product.is_low_stock %}<span class="badge bg-danger">Low Stock</span>{% endif %}
                     </h5>
                     <p class="card-text text-muted">{{ product.category.name }}</p>
-                    <p class="card-text">${{ product.price }} &mdash; {{ product.stock }} in stock</p>
+                    <p class="card-text">KES {{ product.price }} &mdash; {{ product.stock }} in stock</p>
                     <a href="{% url 'product_update' product.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
                     <a href="{% url 'product_delete' product.id %}" class="btn btn-sm btn-outline-danger"
-                    onclick="return confirm('Delete {{ product.name }}? This cannot be undone.');">Delete</a>
+                       onclick="return confirm('Delete {{ product.name }}? This cannot be undone.');">Delete</a>
                     <a href="{% url 'order_create' product.id %}" class="btn btn-sm btn-success">Make Order</a>
                 </div>
             </div>
@@ -39,10 +51,11 @@
         {% endfor %}
     </div>
 
-    <hr class="my-4">
+    <hr class="mb-4" style="margin-top: 2rem;">
 
     <h4>Orders per Day</h4>
     <canvas id="ordersChart" height="100"></canvas>
+</div>
 </div>
 {% endblock %}
 
